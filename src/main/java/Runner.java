@@ -40,30 +40,45 @@ public class Runner {
             System.out.println("4-Öğrenciyi Silme");
             System.out.println("5-Tek Bir Öğrenciyi Görüntüleme");
             System.out.println("0-ÇIKIŞ");
+
+            //
+            System.out.println("Tüm Öğrencilerin AD-SOYAD bilgilerini rapıra yazdırma");
+            //
             System.out.println("İşlem Seçiniz : ");
             select=inp.nextInt();
             inp.nextLine();//okumuyor intden sonra line gelirse okumuyor o yüzden okusun diye yazdım.
 
             switch (select) {
                 case 1:
-                    //bilgileri verilen ögrenciyi kaydetme
-                    Student newStudent = service.getStudentInfo();//kullanıcıdan bilgi alınmasını sağlıyor
-                    service.saveStudent(newStudent);
+                    //bilgileri verilen öğrenciyi kaydetme
+                    Student newStudent=service.getStudentInfo();
+                    new Thread(()->{
+                        service.saveStudent(newStudent);
+                    }).start();
                     break;
                 case 2:
                     //öğrencileri konsola yazdırma
+                    service.printAllStudents();
                     break;
                 case 3:
-                    id=getIdInfo();
                     //id si verilen öğrenciyi güncelleme
+                    id=getIdInfo();
+                    service.updateStudentById(id);
                     break;
                 case 4:
-                    id=getIdInfo();
                     //id si verilen öğrenciyi silme
+                    id=getIdInfo();
+                    service.deleteStudentById(id);
                     break;
                 case 5:
-                    id=getIdInfo();
                     //id si verilen öğrenciyi görüntüleme
+                    id=getIdInfo();
+                    service.printStudentById(id);
+                    break;
+                case 6:
+                    new Thread(()->{
+                        service.generateReport();
+                    }).start();
                     break;
                 case 0:
                     System.out.println("İyi Günler...");
